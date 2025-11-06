@@ -214,6 +214,7 @@ queuectl/
 │   ├── database.py         # SQLite integration
 │   ├── config.py           # Configuration management
 │   ├── dashboard.py        # Flask web dashboard
+│   ├── dashboard.jpg        # Flask web dashboard screenshot
 │   └── templates/
 │       └── dashboard.html  # Web UI
 │
@@ -225,10 +226,6 @@ queuectl/
 │   ├── queuectl.db
 │   └── logs/
 │
-├── screenshots/
-│   ├── status.png
-│   ├── workers.png
-│   └── dashboard.png
 │
 ├── requirements.txt
 ├── setup.py
@@ -319,4 +316,5 @@ Demo Video
 *Last Updated: November 2025*
 
 ```
+
 
