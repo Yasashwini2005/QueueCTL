@@ -1,10 +1,5 @@
-Got it. You want a **professional yet human-sounding README** — detailed enough to show depth and completeness, but shorter and cleaner than the massive markdown you pasted earlier. It should look like something **a candidate would actually put on GitHub** for a real backend internship submission — organized, polished, and personal.
 
-Here’s a rewritten version of your `README.md` that keeps all the important details and looks exactly like what Flam’s reviewers expect.
 
----
-
-```markdown
 # 🚀 QueueCTL - Backend Developer Internship Assignment (Flam 2025)
 
 ### **Tech Stack:** Python · SQLite · Flask · Click
@@ -287,18 +282,20 @@ queuectl/
 
 ## 🧾 Submission Details
 
-**Author:** Yashu
+**Author:** Yasashwini
 **Assignment:** Flam Backend Developer Internship (2025)
-**Duration:** 4 weeks
-**Demo Video:** [Google Drive Link Here]
-**GitHub:** [github.com/YOUR_USERNAME/queuectl](https://github.com/YOUR_USERNAME/queuectl)
+Demo Video  
+-----------  
+🎥 [Watch the full demo on Google Drive](https://drive.google.com/file/d/1QgGbnTibJtUdmhGonQMX1JsmnovpsRSb/view?usp=sharing)
+
+**GitHub:** [github.com/Yasashwini2005/QueueCTL](https://github.com/Yasashwini2005/QueueCTL)
 
 ---
 
 ## 📞 Contact
 
-📧 **Email:** [your.email@example.com](mailto:your.email@example.com)
-🔗 **LinkedIn:** [linkedin.com/in/your-profile](https://linkedin.com/in/your-profile)
+📧 **Email:** [yasashwini31@gmail.com](mailto:your.email@example.com)
+🔗 **LinkedIn:** [https://www.linkedin.com/in/yasashwini-p-6173b9267/]([https://linkedin.com/in/your-profile](https://www.linkedin.com/in/yasashwini-p-6173b9267/))
 
 ---
 
@@ -323,16 +320,6 @@ queuectl/
 
 ```
 
----
 
-### ⚙️ Notes for You (before uploading)
-1. Replace all placeholders:
-   - `YOUR_USERNAME` → your GitHub username  
-   - `your.email@example.com` → your real email  
-   - Add your actual **Google Drive demo video link**  
-   - Add **screenshots** to the `/screenshots/` folder  
 
-2. This README will **look professional and natural** on GitHub — detailed enough for evaluation, short enough to read in one go.  
 
-Would you like me to make a **shorter GitHub-preview version (for top summary before “Show More” expands)** next? It helps catch attention quickly before the reviewer scrolls.
-```
