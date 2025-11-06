@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QueueCTL Dashboard - Job Monitor</title>
+    <style>
+        /* Basic styling - learned from web dev course */
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #1a1d2e;
+            color: white;
+            padding: 20px;
+        }
+        
+        /* Header section */
+        .header {
+            background: linear-gradient(to right, #2d3561, #1f2544);
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 5px solid #5b8def;
+        }
+        
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.2em;
+            color: #5b8def;
+        }
+        
+        .header p {
+            margin: 0;
+            color: #a8b2d1;
+            font-size: 1.1em;
+        }
+        
+        /* Control buttons */
+        .controls {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        button {
+            background-color: #5b8def;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            margin: 5px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            background-color: #4a7cd6;
+        }
+        
+        button:active {
+            background-color: #3968bd;
+        }
+        
+        /* Job cards container - using flexbox I learned */
+        .job-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        /* Individual job card */
+        .card {
+            background-color: #252945;
+            padding: 20px;
+            border-radius: 10px;
+            flex: 1;
+            min-width: 200px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s;
+            border-top: 4px solid;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        /* Different colors for each card type */
+        .card.pending { border-top-color: #f9a825; }
+        .card.processing { border-top-color: #29b6f6; }
+        .card.completed { border-top-color: #66bb6a; }
+        .card.failed { border-top-color: #ef5350; }
+        .card.dead { border-top-color: #bdbdbd; }
+        
+        .card-title {
+            color: #a8b2d1;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .card-emoji {
+            font-size: 2.5em;
+            margin: 10px 0;
+            display: block;
+        }
+        
+        .card-number {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        /* Number colors */
+        .pending .card-number { color: #fdd835; }
+        .processing .card-number { color: #42a5f5; }
+        .completed .card-number { color: #66bb6a; }
+        .failed .card-number { color: #ef5350; }
+        .dead .card-number { color: #bdbdbd; }
+        
+        .card-label {
+            color: #8892b0;
+            font-size: 0.85em;
+        }
+        
+        /* Metrics section */
+        .metrics {
+            background-color: #252945;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .metrics h2 {
+            color: #5b8def;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.6em;
+        }
+        
+        /* Metrics grid - trying grid layout */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .metric-box {
+            background-color: #2d3561;
+            padding: 18px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #3d4573;
+        }
+        
+        .metric-box:hover {
+            border-color: #5b8def;
+        }
+        
+        .metric-title {
+            color: #a8b2d1;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+        
+        .metric-value {
+            color: #5b8def;
+            font-size: 2em;
+            font-weight: bold;
+        }
+        
+        /* Footer/status section */
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .status-box {
+            background-color: #252945;
+            display: inline-block;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .status-box p {
+            margin: 8px 0;
+            color: #a8b2d1;
+        }
+        
+        .timer {
+            color: #66bb6a;
+            font-weight: bold;
+            font-size: 1.3em;
+        }
+        
+        .status-active {
+            color: #66bb6a;
+            font-weight: bold;
+        }
+        
+        .status-paused {
+            color: #ef5350;
+            font-weight: bold;
+        }
+        
+        .credit {
+            margin-top: 20px;
+            color: #8892b0;
+            font-size: 0.9em;
+        }
+        
+        /* Simple animation I found on w3schools */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .card {
+            animation: fadeIn 0.5s;
+        }
+        
+        /* Mobile responsive - media query from tutorial */
+        @media (max-width: 768px) {
+            .job-cards {
+                flex-direction: column;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .card-number {
+                font-size: 2.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main header -->
+    <div class="header">
+        <h1>⚡ QueueCTL Dashboard</h1>
+        <p>Real-time Job Queue Monitoring System</p>
+    </div>
+    
+    <!-- Control buttons -->
+    <div class="controls">
+        <button onclick="refreshPage()">🔄 Refresh</button>
+        <button onclick="toggleAutoRefresh()" id="toggleBtn">⏸ Pause Auto-Refresh</button>
+    </div>
+    
+    <!-- Job status cards -->
+    <div class="job-cards">
+        <!-- Pending jobs card -->
+        <div class="card pending">
+            <div class="card-title">Pending</div>
+            <span class="card-emoji">⏳</span>
+            <div class="card-number" id="pending">{{ stats.pending }}</div>
+            <div class="card-label">jobs waiting</div>
+        </div>
+        
+        <!-- Processing jobs card -->
+        <div class="card processing">
+            <div class="card-title">Processing</div>
+            <span class="card-emoji">⚙️</span>
+            <div class="card-number" id="processing">{{ stats.processing }}</div>
+            <div class="card-label">currently running</div>
+        </div>
+        
+        <!-- Completed jobs card -->
+        <div class="card completed">
+            <div class="card-title">Completed</div>
+            <span class="card-emoji">✅</span>
+            <div class="card-number" id="completed">{{ stats.completed }}</div>
+            <div class="card-label">finished successfully</div>
+        </div>
+        
+        <!-- Failed jobs card -->
+        <div class="card failed">
+            <div class="card-title">Failed</div>
+            <span class="card-emoji">🔄</span>
+            <div class="card-number" id="failed">{{ stats.failed }}</div>
+            <div class="card-label">will retry</div>
+        </div>
+        
+        <!-- Dead jobs card (DLQ) -->
+        <div class="card dead">
+            <div class="card-title">Dead (DLQ)</div>
+            <span class="card-emoji">💀</span>
+            <div class="card-number" id="dead">{{ stats.dead }}</div>
+            <div class="card-label">need attention</div>
+        </div>
+    </div>
+    
+    <!-- Performance metrics section -->
+    <div class="metrics">
+        <h2>📊 Performance Metrics</h2>
+        <div class="metrics-grid">
+            <div class="metric-box">
+                <div class="metric-title">Average Execution Time</div>
+                <div class="metric-value">{{ "%.2f"|format(metrics.avg_execution_time) }}s</div>
+            </div>
+            
+            <div class="metric-box">
+                <div class="metric-title">Success Rate</div>
+                <div class="metric-value">{{ "%.1f"|format(metrics.success_rate) }}%</div>
+            </div>
+            
+            <div class="metric-box">
+                <div class="metric-title">Jobs (Last 24h)</div>
+                <div class="metric-value">{{ metrics.jobs_last_24h }}</div>
+            </div>
+            
+            <div class="metric-box">
+                <div class="metric-title">Total Jobs</div>
+                <div class="metric-value">{{ stats.pending + stats.processing + stats.completed + stats.failed + stats.dead }}</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer with auto-refresh status -->
+    <div class="footer">
+        <div class="status-box">
+            <p>Auto-refresh: <span id="refreshStatus" class="status-active">Active</span></p>
+            <p>Next update in: <span class="timer" id="countdown">10</span> seconds</p>
+        </div>
+        <p class="credit">Built by Yashu for Flam Internship Assignment 2025</p>
+    </div>
+    
+    <script>
+        // Auto-refresh functionality
+        var refreshEnabled = true;
+        var timeLeft = 10;
+        var timerID;
+        
+        // Function to refresh the page
+        function refreshPage() {
+            location.reload();
+        }
+        
+        // Toggle auto-refresh on/off
+        function toggleAutoRefresh() {
+            refreshEnabled = !refreshEnabled;
+            var button = document.getElementById('toggleBtn');
+            var status = document.getElementById('refreshStatus');
+            
+            if (refreshEnabled) {
+                button.textContent = '⏸ Pause Auto-Refresh';
+                status.textContent = 'Active';
+                status.className = 'status-active';
+                startTimer();
+            } else {
+                button.textContent = '▶ Resume Auto-Refresh';
+                status.textContent = 'Paused';
+                status.className = 'status-paused';
+                stopTimer();
+            }
+        }
+        
+        // Update job stats from server
+        function updateStats() {
+            if (!refreshEnabled) return;
+            
+            // Fetch latest stats from API
+            fetch('/api/stats')
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(data) {
+                    // Update each stat
+                    document.getElementById('pending').textContent = data.pending;
+                    document.getElementById('processing').textContent = data.processing;
+                    document.getElementById('completed').textContent = data.completed;
+                    document.getElementById('failed').textContent = data.failed;
+                    document.getElementById('dead').textContent = data.dead;
+                })
+                .catch(function(error) {
+                    console.log('Error updating stats:', error);
+                });
+        }
+        
+        // Countdown timer
+        function startTimer() {
+            timeLeft = 10;
+            updateCountdown();
+            
+            if (timerID) {
+                clearInterval(timerID);
+            }
+            
+            timerID = setInterval(function() {
+                timeLeft--;
+                updateCountdown();
+                
+                if (timeLeft <= 0) {
+                    timeLeft = 10;
+                    updateStats();
+                }
+            }, 1000);
+        }
+        
+        function stopTimer() {
+            if (timerID) {
+                clearInterval(timerID);
+            }
+        }
+        
+        function updateCountdown() {
+            document.getElementById('countdown').textContent = timeLeft;
+        }
+        
+        // Start the timer when page loads
+        startTimer();
+        
+        // Update stats every 10 seconds
+        setInterval(function() {
+            if (refreshEnabled) {
+                updateStats();
+            }
+        }, 10000);
+    </script>
+</body>
+</html>
