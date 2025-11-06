@@ -129,7 +129,7 @@ timeout, created_at, updated_at, next_retry_at, error_message
 ### 1️⃣ Clone & Setup
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/queuectl.git
+git clone https://github.com/Yasashwini2005/queuectl.git
 cd queuectl
 python -m venv venv
 venv\Scripts\activate   # (Windows)
@@ -319,6 +319,7 @@ Demo Video
 *Last Updated: November 2025*
 
 ```
+
 
 
 
